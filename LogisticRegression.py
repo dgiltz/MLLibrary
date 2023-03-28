@@ -1,11 +1,11 @@
 import numpy as np
-import Hyperparameters
+from Hyperparameters import Hyperparameters
 from sklearn.datasets import make_classification
 import datasetmethods as dsmethods
 
 
 class LogisticRegression:
-    def fit(self, X, y, hp: Hyperparameters.Hyperparameters):
+    def fit(self, X, y, hp: Hyperparameters):
         training, testing = dsmethods.trainTestSplit([X, y], hp.trP, hp.tstP)
 
         self.train(training[0], training[1], hp)
@@ -38,7 +38,7 @@ class LogisticRegression:
 
         return stats
 
-    def train(self, X, y, hyPm: Hyperparameters.Hyperparameters):
+    def train(self, X, y, hyPm: Hyperparameters):
         """
         X -> input data
         y -> actual output
@@ -80,7 +80,7 @@ class LogisticRegression:
         return 1 / (1 + np.e ** (-z))
 
 
-def test(n, nf, hp, verbose=True):
+def test(n, nf, hp : Hyperparameters, verbose=True):
     X, y = make_classification(
         n_samples=n,
         n_features=nf,
@@ -93,3 +93,5 @@ def test(n, nf, hp, verbose=True):
             print(k + ": " + str(v))
 
     return results
+
+results = test(10000, 12, Hyperparameters())
