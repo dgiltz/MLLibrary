@@ -56,3 +56,13 @@ def trainTestSplit(arrays, trP, tstP, shuffle=True):
             testing.append(arr[trSize:tstSize])
 
     return training, testing
+
+
+def normalize(data: np.array, type: str = "ZSCORE"):
+    match (type.capitalize):
+        case "RANGE", "RNG", "R":
+            return (data - np.min(data)) / (np.max(data) - np.min(data))
+        case "MEANSTD", "ZSCORE", "Z":
+            return (data - np.mean(data)) / (np.std(data))
+        case "LOG", "LOGARITHM", "L":
+            return np.log(data)
