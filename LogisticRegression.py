@@ -93,5 +93,3 @@ def test(n, nf, hp : Hyperparameters, verbose=True):
             print(k + ": " + str(v))
 
     return results
-
-results = test(10000, 12, Hyperparameters())
