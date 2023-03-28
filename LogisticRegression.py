@@ -3,14 +3,11 @@ import Hyperparameters
 from sklearn.datasets import make_classification
 import datasetmethods as dsmethods
 
-# from sklearn import datasets
-# import pandas as pd
-
 
 class LogisticRegression:
     def fit(self, X, y, hp: Hyperparameters.Hyperparameters):
         training, testing = dsmethods.trainTestSplit([X, y], hp.trP, hp.tstP)
-        
+
         self.train(training[0], training[1], hp)
         results = self.test(testing[0], testing[1])
 
@@ -42,30 +39,29 @@ class LogisticRegression:
         return stats
 
     def train(self, X, y, hyPm: Hyperparameters.Hyperparameters):
-        '''
+        """
         X -> input data
         y -> actual output
         hyPm -> hyperparameters object
-        '''
+        """
         N, Nf = X.shape
         y = y.reshape(1, N)
         self.loss = np.zeros(hyPm.epochs)
-        
+
         self.W = np.random.rand(Nf)
         self.bias = 0
 
         for e in range(hyPm.epochs):
-            for i in range((N-1)//hyPm.bs+1):
-                XBatch = X[i*hyPm.bs:(i+1)*hyPm.bs]
-                yBatch = y[0, i*hyPm.bs:(i+1)*hyPm.bs]#.reshape(hyPm.bs, 1)
+            for i in range((N - 1) // hyPm.bs + 1):
+                XBatch = X[i * hyPm.bs : (i + 1) * hyPm.bs]
+                yBatch = y[0, i * hyPm.bs : (i + 1) * hyPm.bs]  # .reshape(hyPm.bs, 1)
                 # get predicted y-value given inputs and Weight
                 yPred = self._sigmoid(np.dot(XBatch, self.W) + self.bias)
                 # gradient descent step
-                self.W -= hyPm.lr*(1/N)*np.dot(XBatch.T, (yPred - yBatch))
-                self.bias -= hyPm.lr*(1/N)*np.sum((yPred - yBatch))
-            
+                self.W -= hyPm.lr * (1 / N) * np.dot(XBatch.T, (yPred - yBatch))
+                self.bias -= hyPm.lr * (1 / N) * np.sum((yPred - yBatch))
+
             self.loss[e] = self._loss(X, y)
-            
 
     def predict(self, X):
         z = np.dot(X, self.W)
@@ -81,7 +77,8 @@ class LogisticRegression:
         return l
 
     def _sigmoid(self, z):
-        return 1 / (1 + np.e**(-z))
+        return 1 / (1 + np.e ** (-z))
+
 
 def test(n, nf, hp, verbose=True):
     X, y = make_classification(
